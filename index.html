@@ -142,6 +142,126 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-MySQL存储过程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="2020/08/20/MySQL存储过程/">MySQL存储过程</a>
+    </h1>
+  
+
+        
+        <a href="2020/08/20/MySQL存储过程/" class="archive-article-date">
+  	<time datetime="2020-08-20T11:43:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="为什么使用"><a href="#为什么使用" class="headerlink" title="为什么使用?"></a>为什么使用?</h1><ol>
+<li><p>简化复杂操作</p>
+</li>
+<li><p>不需要反复建立一系列处理步骤，这保证了数据的完整性。如果所有开发人员和应用程序都使用同一（试验和测试）存储过程，则所使用的代码都是相同的。这一点的延伸就是防止错误。需要执行的步骤越多，出错的可能性就越大。防止错误保证了数据的一致性。</p>
+</li>
+<li><p>易于维护。如果表明列名或业务逻辑有变化，只需要更改存储过程的代码，使用者甚至不需要知道这些变化。</p>
+</li>
+<li><p>提高性能。比使用单独的SQL语句要快。</p>
+</li>
+<li><p>编写功能更强更灵活的代码。  </p>
+<h1 id="创建存储过程"><a href="#创建存储过程" class="headerlink" title="创建存储过程"></a>创建存储过程</h1><p>例：返回产品平均价格的存储过程  </p>
+<p> CREATE PROCEDURE productpricing()<br> BEGIN</p>
+<pre><code> SELECT Avg(prod_price) AS pricecaverage
+ FROM products;</code></pre>
+<p> END;<br>如果需要参数，在()中列举出来。  </p>
+<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><p> CALL productpricing();</p>
+<h1 id="删除存储过程"><a href="#删除存储过程" class="headerlink" title="删除存储过程"></a>删除存储过程</h1><p> DROP PROCEDURE productpricing;<br>在后面加<code>IF EXISTS</code>仅在存在时删除。  </p>
+<h1 id="使用参数"><a href="#使用参数" class="headerlink" title="使用参数"></a>使用参数</h1><p> CREATE PROCEDURE productpricing(</p>
+<pre><code> OUT pl DECIMAL(8,2),
+ OUT ph DECIMAL(8,2),
+ OUT pa DECIMAL(8,2),</code></pre>
+<p> )<br> BEGIN</p>
+<pre><code> SELECT Min(prod_price)
+ INTO pl
+ FROM products;
+ SELECT Max(prod_price)
+ INTO ph
+ FROM products;
+ SELECT Avg(prod_price)
+ INTO pa
+ FROM products;</code></pre>
+<p> END;<br>关键字：  </p>
+</li>
+</ol>
+<ul>
+<li>OUT<br>指出相应的参数用来从存储过程传出一个值（返回给调用者）</li>
+<li>IN<br>传递给存储过程</li>
+<li>INOUT<br>对存储过程传入和传出  </li>
+</ul>
+<p>调用  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CALL productpricing(@pricelow,</span><br><span class="line">                    @pricehigh,</span><br><span class="line">                    @priceaverage);</span><br></pre></td></tr></table></figure>
+<h1 id="建立智能存储过程"><a href="#建立智能存储过程" class="headerlink" title="建立智能存储过程"></a>建立智能存储过程</h1><p><img src="/img/procedure1.png" alt="存储过程1">  </p>
+<p><img src="/img/procedure2.png" alt="存储过程2"><br>DECLARE定义局部变量。</p>
+<h1 id="检查存储过程"><a href="#检查存储过程" class="headerlink" title="检查存储过程"></a>检查存储过程</h1><pre><code>SHOW CREATE PROCEDURE ordertotal;</code></pre>
+<p>获得详细信息  </p>
+<pre><code>SHOW PROCEDURE STATUS LIKE &#39;ordertotal&#39;;</code></pre>
+<h1 id="游标"><a href="#游标" class="headerlink" title="游标"></a>游标</h1><p><img src="/img/cursor1" alt="游标1"><br><img src="/img/cursor2" alt="游标1"><br>以上包括存储过程、游标、逐行处理以及调用其他存储过程的完整样例。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">MySQL</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="2020/08/20/MySQL存储过程/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-线程同步器" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -451,6 +571,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Java</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
               </li>
             
             <div class="clearfix"></div>

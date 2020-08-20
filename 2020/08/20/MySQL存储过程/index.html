@@ -6,20 +6,25 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="//xiahe.com">
-  <title>线程同步器 | XiaHe的主页</title>
+  <title>MySQL存储过程 | XiaHe的主页</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="CountDownLatch">
+  <meta name="description" content="为什么使用? 简化复杂操作  不需要反复建立一系列处理步骤，这保证了数据的完整性。如果所有开发人员和应用程序都使用同一（试验和测试）存储过程，则所使用的代码都是相同的。这一点的延伸就是防止错误。需要执行的步骤越多，出错的可能性就越大。防止错误保证了数据的一致性。  易于维护。如果表明列名或业务逻辑有变化，只需要更改存储过程的代码，使用者甚至不需要知道这些变化。  提高性能。比使用单独的SQL语句要">
 <meta property="og:type" content="article">
-<meta property="og:title" content="线程同步器">
-<meta property="og:url" content="2020/08/17/%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E5%99%A8/index.html">
+<meta property="og:title" content="MySQL存储过程">
+<meta property="og:url" content="2020/08/20/MySQL%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/index.html">
 <meta property="og:site_name" content="XiaHe的主页">
-<meta property="og:description" content="CountDownLatch">
+<meta property="og:description" content="为什么使用? 简化复杂操作  不需要反复建立一系列处理步骤，这保证了数据的完整性。如果所有开发人员和应用程序都使用同一（试验和测试）存储过程，则所使用的代码都是相同的。这一点的延伸就是防止错误。需要执行的步骤越多，出错的可能性就越大。防止错误保证了数据的一致性。  易于维护。如果表明列名或业务逻辑有变化，只需要更改存储过程的代码，使用者甚至不需要知道这些变化。  提高性能。比使用单独的SQL语句要">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2020-08-17T14:38:51.000Z">
-<meta property="article:modified_time" content="2020-08-17T15:19:04.346Z">
+<meta property="og:image" content="/img/procedure1.png">
+<meta property="og:image" content="/img/procedure2.png">
+<meta property="og:image" content="/img/cursor1">
+<meta property="og:image" content="/img/cursor2">
+<meta property="article:published_time" content="2020-08-20T11:43:26.000Z">
+<meta property="article:modified_time" content="2020-08-20T12:45:20.981Z">
 <meta property="article:author" content="XiaHe">
-<meta property="article:tag" content="Java">
+<meta property="article:tag" content="MySQL">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="/img/procedure1.png">
   
     <link rel="alternative" href="/atom.xml" title="XiaHe的主页" type="application/atom+xml">
   
@@ -145,31 +150,73 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-线程同步器" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-MySQL存储过程" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      线程同步器
+      MySQL存储过程
     </h1>
   
 
         
-        <a href="2020/08/17/线程同步器/" class="archive-article-date">
-  	<time datetime="2020-08-17T14:38:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-17</time>
+        <a href="2020/08/20/MySQL存储过程/" class="archive-article-date">
+  	<time datetime="2020-08-20T11:43:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-20</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="CountDownLatch"><a href="#CountDownLatch" class="headerlink" title="CountDownLatch"></a>CountDownLatch</h1><a id="more"></a>
-<p>用来同步一个或多个任务，强制它们等待由其他任务执行的一组操作完成<br>向CountDownLatch对象设置一个初始计数值，任何在这个对象上调用await()的方法都将阻塞，直至计数值为0。其他任务结束工作时，在该对象上调用countDown()来减小这个计数值。<strong>CountDownLatch只触发一次，计数值不能被重置</strong>。需要重置则使用CyclicBarrier。</p>
-<hr>
-<h1 id="CyclicBarrier"><a href="#CyclicBarrier" class="headerlink" title="CyclicBarrier"></a>CyclicBarrier</h1><p><strong>可以多次重用</strong>。可以在初始化CyclicBarrier时提供一个“栅栏动作”，它是一个Runnable，当计数值到达0时自动执行。</p>
-<h1 id="Semaphore"><a href="#Semaphore" class="headerlink" title="Semaphore"></a>Semaphore</h1><p><code>release()</code> 增加计数器的值<br><code>acquire()</code> 减少计数器的值<br>如果构造Semaphore时传递的参数为<em>N</em>，并在<em>M</em>个线程中调用了该信号量的release方法，那么在调用acquire使<em>M</em>个线程同步时传递的参数应该是<em>M+N</em></p>
+        <h1 id="为什么使用"><a href="#为什么使用" class="headerlink" title="为什么使用?"></a>为什么使用?</h1><ol>
+<li><p>简化复杂操作</p>
+</li>
+<li><p>不需要反复建立一系列处理步骤，这保证了数据的完整性。如果所有开发人员和应用程序都使用同一（试验和测试）存储过程，则所使用的代码都是相同的。这一点的延伸就是防止错误。需要执行的步骤越多，出错的可能性就越大。防止错误保证了数据的一致性。</p>
+</li>
+<li><p>易于维护。如果表明列名或业务逻辑有变化，只需要更改存储过程的代码，使用者甚至不需要知道这些变化。</p>
+</li>
+<li><p>提高性能。比使用单独的SQL语句要快。</p>
+</li>
+<li><p>编写功能更强更灵活的代码。  </p>
+<h1 id="创建存储过程"><a href="#创建存储过程" class="headerlink" title="创建存储过程"></a>创建存储过程</h1><p>例：返回产品平均价格的存储过程  </p>
+<p> CREATE PROCEDURE productpricing()<br> BEGIN</p>
+<pre><code> SELECT Avg(prod_price) AS pricecaverage
+ FROM products;</code></pre>
+<p> END;<br>如果需要参数，在()中列举出来。  </p>
+<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><p> CALL productpricing();</p>
+<h1 id="删除存储过程"><a href="#删除存储过程" class="headerlink" title="删除存储过程"></a>删除存储过程</h1><p> DROP PROCEDURE productpricing;<br>在后面加<code>IF EXISTS</code>仅在存在时删除。  </p>
+<h1 id="使用参数"><a href="#使用参数" class="headerlink" title="使用参数"></a>使用参数</h1><p> CREATE PROCEDURE productpricing(</p>
+<pre><code> OUT pl DECIMAL(8,2),
+ OUT ph DECIMAL(8,2),
+ OUT pa DECIMAL(8,2),</code></pre>
+<p> )<br> BEGIN</p>
+<pre><code> SELECT Min(prod_price)
+ INTO pl
+ FROM products;
+ SELECT Max(prod_price)
+ INTO ph
+ FROM products;
+ SELECT Avg(prod_price)
+ INTO pa
+ FROM products;</code></pre>
+<p> END;<br>关键字：  </p>
+</li>
+</ol>
+<ul>
+<li>OUT<br>指出相应的参数用来从存储过程传出一个值（返回给调用者）</li>
+<li>IN<br>传递给存储过程</li>
+<li>INOUT<br>对存储过程传入和传出  </li>
+</ul>
+<p>调用  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CALL productpricing(@pricelow,</span><br><span class="line">                    @pricehigh,</span><br><span class="line">                    @priceaverage);</span><br></pre></td></tr></table></figure>
+<h1 id="建立智能存储过程"><a href="#建立智能存储过程" class="headerlink" title="建立智能存储过程"></a>建立智能存储过程</h1><p><img src="/img/procedure1.png" alt="存储过程1">  </p>
+<p><img src="/img/procedure2.png" alt="存储过程2"><br>DECLARE定义局部变量。</p>
+<h1 id="检查存储过程"><a href="#检查存储过程" class="headerlink" title="检查存储过程"></a>检查存储过程</h1><pre><code>SHOW CREATE PROCEDURE ordertotal;</code></pre>
+<p>获得详细信息  </p>
+<pre><code>SHOW PROCEDURE STATUS LIKE &#39;ordertotal&#39;;</code></pre>
+<h1 id="游标"><a href="#游标" class="headerlink" title="游标"></a>游标</h1><p><img src="/img/cursor1" alt="游标1"><br><img src="/img/cursor2" alt="游标1"><br>以上包括存储过程、游标、逐行处理以及调用其他存储过程的完整样例。</p>
 
       
 
@@ -204,7 +251,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">MySQL</a>
         		</li>
       		
 		</ul>
@@ -260,7 +307,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http:2020/08/17/线程同步器/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http:2020/08/20/MySQL存储过程/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -274,18 +321,9 @@
   
 <nav id="article-nav">
   
-    <a href="2020/08/20/MySQL存储过程/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          MySQL存储过程
-        
-      </div>
-    </a>
   
-  
-    <a href="2020/08/17/HTTP相关/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">HTTP相关</div>
+    <a href="2020/08/17/线程同步器/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">线程同步器</div>
       <i class="icon-circle-right"></i>
     </a>
   
